@@ -10,6 +10,7 @@ class Jtmseditor < Processing::App
     stroke_weight 2
     @drag = nil
     @select = nil
+    @edges = []
   end
 
   def update
@@ -18,6 +19,7 @@ class Jtmseditor < Processing::App
   def draw
     update
     background 51
+    @edges.each &:draw
     @objects.each &:draw
   end
 
@@ -71,12 +73,21 @@ class Jtmseditor < Processing::App
   def key_pressed
     if key_code == 127
       @objects.delete @select
+      @edges.delete_if { |x| x.nodes.include? @select }
       @drag = @select = nil
     end
   end
 
   def connect obj1, obj2
-    
+    found = @edges.find do |x| 
+      x.nodes == [obj1, obj2] ||
+      x.nodes == [obj2, obj1]
+    end
+    if found
+      @edges.delete found
+      return
+    end
+    @edges << Edge.new(obj1, obj2)
   end
 
 end

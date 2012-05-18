@@ -4,7 +4,6 @@ class Node
   def initialize id, pos
     @id = id
     @pos = pos
-    @connections = connections
     @border = color(0, 0, 0)
   end
 
