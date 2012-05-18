@@ -8,6 +8,7 @@ class Jtmseditor < Processing::App
     @objects = []
     smooth
     stroke_weight 2
+    stroke 255, 255, 255
     @drag = nil
     @select = nil
     @edges = []
@@ -21,6 +22,12 @@ class Jtmseditor < Processing::App
     background 51
     @edges.each &:draw
     @objects.each &:draw
+    text_align LEFT, BASELINE
+    fill 230, 255, 250
+    text 'Zmiana elementu : PPM', 10, 15
+    text 'Umieszczenie elementu : LPM', 10, 30
+    text 'Krawędź : CTRL + LPM', 10, 45
+    text 'Przemieszczanie elementów : przytrzymaj LPM', 10, 60
   end
 
   def mouse_released

@@ -17,6 +17,9 @@ class Justification < Node
     triangle *[@pos[0]+40, @pos[1]] +
               [@pos[0]-28, @pos[1]-28] +
               [@pos[0]-28, @pos[1]+28]
+    text_align CENTER, CENTER
+    fill 0, 0, 0
+    text id.to_s, *@pos
   end
 
 end

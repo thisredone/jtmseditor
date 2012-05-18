@@ -19,7 +19,11 @@ class Assertion < Node
 
   def draw
     stroke @border
+    fill 255, 255, 255
     ellipse *@pos + [@radius*2, @radius*2]
+    text_align CENTER, CENTER
+    fill 0, 0, 0
+    text id.to_s, *@pos
   end
 
 end
