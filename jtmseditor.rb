@@ -25,9 +25,10 @@ class Jtmseditor < Processing::App
     text_align LEFT, BASELINE
     fill 230, 255, 250
     text 'Zmiana elementu : PPM', 10, 15
-    text 'Umieszczenie elementu : LPM', 10, 30
-    text 'Krawędź : CTRL + LPM', 10, 45
-    text 'Przemieszczanie elementów : przytrzymaj LPM', 10, 60
+    text 'Umieszczenie/zaznaczanie elementu : LPM', 10, 30
+    text 'Krawędź : zaznacz + CTRL + LPM', 10, 45
+    text 'Przemieszczanie : przytrzymaj LPM', 10, 60
+    text 'Usuwanie : zaznacz + del', 10, 75
   end
 
   def mouse_released
