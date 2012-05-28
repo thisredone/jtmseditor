@@ -14,7 +14,7 @@ class Assertion < Node
   end
 
   def out?
-    !in?
+    @status == :OUT?
   end
 
   def draw

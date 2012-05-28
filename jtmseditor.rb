@@ -1,4 +1,4 @@
-Dir['lib/*.rb'].reverse.each &method(:require)
+Dir['lib/*.rb'].reverse.each { |x| require x }
 
 class Jtmseditor < Processing::App
 
@@ -57,6 +57,10 @@ class Jtmseditor < Processing::App
     return unless mouse_button == 37
     mpos = [mouse_x, mouse_y]
     found = search mpos
+    if @drag
+      @drag.pos = mpos
+      return
+    end
     if found
       (@drag ||= found).pos = mpos
       select @drag
