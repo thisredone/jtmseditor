@@ -1,12 +1,11 @@
 class Assertion < Node
-
-  attr_accessor :pos
-  attr_reader :radius, :id
   
   def initialize id, pos
     super
     @status = nil
     @radius = 40
+    @points = [ [@pos[0]+42, @pos[1]],
+                [@pos[0]-42, @pos[1]] ]
   end
 
   def in?

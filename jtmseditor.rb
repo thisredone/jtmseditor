@@ -13,12 +13,8 @@ class Jtmseditor < Processing::App
     @select = nil
     @edges = []
   end
-
-  def update
-  end
   
   def draw
-    update
     background 51
     @edges.each &:draw
     @objects.each &:draw
@@ -29,6 +25,7 @@ class Jtmseditor < Processing::App
     text 'Krawędź : zaznacz + CTRL + LPM', 10, 45
     text 'Przemieszczanie : przytrzymaj LPM', 10, 60
     text 'Usuwanie : zaznacz + del', 10, 75
+    text 'Obracanie : zaznacz + alt + przeciągnij w poziomie', 10, 90
   end
 
   def mouse_released
@@ -55,8 +52,8 @@ class Jtmseditor < Processing::App
 
   def mouse_dragged
     return unless mouse_button == 37
-    if key_pressed? && key_code == 18 && @select && @select.respond_to?(:rotate)
-      return @select.rotate (mouse_x-pmouse_x)
+    if key_pressed? && key_code == 18 && @select
+      return @select.rotate(mouse_x-pmouse_x)
     end
     mpos = [mouse_x, mouse_y]
     return @drag.pos = mpos if @drag
@@ -90,14 +87,8 @@ class Jtmseditor < Processing::App
   end
 
   def connect obj1, obj2
-    found = @edges.find do |x| 
-      x.nodes == [obj1, obj2] ||
-      x.nodes == [obj2, obj1]
-    end
-    if found
-      @edges.delete found
-      return
-    end
+    found = @edges.find { |x| x.nodes == [obj1, obj2] }
+    return @edges.delete found if found
     @edges << Edge.new(obj1, obj2)
   end
 
