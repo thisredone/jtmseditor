@@ -10,13 +10,12 @@ class Justification < Node
     @points = [ [@pos[0]+40, @pos[1]],
                 [@pos[0]-28, @pos[1]-28],
                 [@pos[0]-28, @pos[1]+28],
-                [@pos[0]-28, @pos[1]] ].map{|x| x.map &:to_f}
+                [@pos[0]-30, @pos[1]] ].map{|x| x.map &:to_f}
   end
 
   def pos= x
     @points.map! { |p| [p[0]+(x[0]-pos[0]), p[1]+(x[1]-@pos[1])] }
     @pos = x
-    rotate(1)
   end
 
   def rotate angle

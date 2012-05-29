@@ -55,13 +55,12 @@ class Jtmseditor < Processing::App
 
   def mouse_dragged
     return unless mouse_button == 37
-    mpos = [mouse_x, mouse_y]
-    found = search mpos
-    if @drag
-      @drag.pos = mpos
-      return
+    if key_pressed? && key_code == 18 && @select && @select.respond_to?(:rotate)
+      return @select.rotate (mouse_x-pmouse_x)
     end
-    if found
+    mpos = [mouse_x, mouse_y]
+    return @drag.pos = mpos if @drag
+    if (found = search mpos)
       (@drag ||= found).pos = mpos
       select @drag
     else
