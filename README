@@ -1,3 +1,5 @@
 jtms
-Truth Maintenance System
+Justification-Based Truth Maintenance System
 Editor + Visualizator
+
+written in JRuby using ruby-processing library

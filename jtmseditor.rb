@@ -27,6 +27,9 @@ class Jtmseditor < Processing::App
     text 'Usuwanie : zaznacz + del', 10, 75
     text 'Obracanie : zaznacz + alt + przeciągnij w poziomie', 10, 90
     text 'Negacja : zaznacz + Shift + LPM', 10, 105
+    text 'Zmien OUT/IN : zaznacz + Q', 10, 120
+    text 'Zapis do pliku output.pl : S', 10, 135
+    text 'Odczyt z pliku input.txt : L', 10, 150
   end
 
   def mouse_released
@@ -81,10 +84,17 @@ class Jtmseditor < Processing::App
   end
 
   def key_pressed
-    if key_code == 127
+    case key_code
+    when 127
       @objects.delete @select
       @edges.delete_if { |x| x.nodes.include? @select }
       @drag = @select = nil
+    when 81
+      @select.switch if @select.class == Assertion
+    when 83
+      save
+    when 76
+      load
     end
   end
 
@@ -98,6 +108,34 @@ class Jtmseditor < Processing::App
     found = @edges.find { |x| x.nodes == [obj1, obj2] }
     @edges << (found = Edge.new(obj1, obj2)) if !found
     found.negate
+  end
+
+  def save
+    output = ''
+    nodes = @objects.select { |x| x.class == Assertion }
+    nodes_attr = nodes.map { |x| x.in? ? 1 : 0 }
+    output << "nodes([#{nodes.map(&:id).join(',')}],[#{nodes_attr.join(',')}]).\n"
+    @edges.group_by { |x| x.nodes[1] }.map do |node, edges|
+      ins = edges.map { |x| x.nodes[0].id }.join ','
+      negs = edges.map { |x| x.negated? ? '0' : '1' }.join ','
+      "bramka(#{node.id},[#{ins}],[#{negs}])\n"
+    end.each { |x| output << x }
+    @objects.select { |x| !@edges.find { |e| e.nodes[1] == x } }.each do |node|
+      output << "bramka(#{node.id},[],[])\n"
+    end
+    File.open('output.pl', 'w') { |f| f << output }
+  rescue
+    puts 'not saved'
+  end
+
+  def load
+    input = File.read 'input.txt'
+    input.split("\n").map { |x| x.split(' ') }.each do |id, state|
+      node = @objects.find { |x| x.id == id.to_i }
+      node.switch if node && node.state != state rescue nil
+    end
+  rescue
+    puts 'not loaded'
   end
 
 end

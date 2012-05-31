@@ -12,6 +12,10 @@ class Edge
     @negation = !@negation
   end
 
+  def negated?
+    @negation
+  end
+
   def draw
     stroke 255, 255, 255
     line *@nodes[0].out_point+@nodes[1].in_point
