@@ -22,10 +22,11 @@ class Jtmseditor < Processing::App
     fill 230, 255, 250
     text 'Zmiana elementu : PPM', 10, 15
     text 'Umieszczenie/zaznaczanie elementu : LPM', 10, 30
-    text 'Krawędź : zaznacz + CTRL + LPM', 10, 45
+    text 'Krawędź : zaznacz + Ctrl + LPM', 10, 45
     text 'Przemieszczanie : przytrzymaj LPM', 10, 60
     text 'Usuwanie : zaznacz + del', 10, 75
     text 'Obracanie : zaznacz + alt + przeciągnij w poziomie', 10, 90
+    text 'Negacja : zaznacz + Shift + LPM', 10, 105
   end
 
   def mouse_released
@@ -38,8 +39,9 @@ class Jtmseditor < Processing::App
       return
     end
     if (found = search [mouse_x, mouse_y])
-      if key_pressed? && key_code == 17 && found != @select
-        connect @select, found
+      if key_pressed? && found != @select
+        connect @select, found if key_code == 17
+        negate @select, found if key_code == 16
       else
         select found
       end
@@ -90,6 +92,12 @@ class Jtmseditor < Processing::App
     found = @edges.find { |x| x.nodes == [obj1, obj2] }
     return @edges.delete found if found
     @edges << Edge.new(obj1, obj2)
+  end
+
+  def negate obj1, obj2
+    found = @edges.find { |x| x.nodes == [obj1, obj2] }
+    @edges << (found = Edge.new(obj1, obj2)) if !found
+    found.negate
   end
 
 end
