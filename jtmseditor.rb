@@ -121,7 +121,7 @@ class Jtmseditor < Processing::App
       "bramka(#{node.id},[#{ins}],[#{negs}]).\n"
     end.each { |x| output << x }
     @objects.select { |x| !@edges.find { |e| e.nodes[1] == x } }.each do |node|
-      output << "bramka(#{node.id},[],[])\n"
+      output << "bramka(#{node.id},[],[]).\n"
     end
     File.open('output.pl', 'w') { |f| f << output }
   rescue
