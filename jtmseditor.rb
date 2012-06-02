@@ -117,7 +117,7 @@ class Jtmseditor < Processing::App
     output << "nodes([#{nodes.map(&:id).join(',')}],[#{nodes_attr.join(',')}]).\n"
     @edges.group_by { |x| x.nodes[1] }.map do |node, edges|
       ins = edges.map { |x| x.nodes[0].id }.join ','
-      negs = edges.map { |x| x.negated? ? '0' : '1' }.join ','
+      negs = edges.map { |x| x.negated? ? '1' : '0' }.join ','
       "bramka(#{node.id},[#{ins}],[#{negs}])\n"
     end.each { |x| output << x }
     @objects.select { |x| !@edges.find { |e| e.nodes[1] == x } }.each do |node|
