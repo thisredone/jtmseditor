@@ -146,14 +146,14 @@ class Jtmseditor < Processing::App
   end
 
   def save_file
-    File.open('save1.ntwk', 'w') do |f|
+    File.open('save.ntwk', 'w') do |f|
       f << Marshal.dump([@objects, @edges, @counter])
     end
   rescue
   end
 
   def load_file
-    @objects, @edges, @counter = Marshal.load File.read 'save1.ntwk'
+    @objects, @edges, @counter = Marshal.load File.read 'save.ntwk'
   rescue
   end
 
