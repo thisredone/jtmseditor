@@ -6,6 +6,7 @@ class Jtmseditor < Processing::App
     @counter = 0
     @current_object = Justification
     @objects = []
+    size 1024, 768
     smooth
     stroke_weight 2
     stroke 255, 255, 255
@@ -27,9 +28,11 @@ class Jtmseditor < Processing::App
     text 'Usuwanie : zaznacz + del', 10, 75
     text 'Obracanie : zaznacz + alt + przeciągnij w poziomie', 10, 90
     text 'Negacja : zaznacz + Shift + LPM', 10, 105
-    text 'Zmien OUT/IN : zaznacz + Q', 10, 120
-    text 'Zapis do pliku output.pl : S', 10, 135
-    text 'Odczyt z pliku input.txt : L', 10, 150
+    text 'Zmien OUT/IN : zaznacz + q', 10, 120
+    text 'Zapis do pliku save.ntwk : s', 10, 135
+    text 'Odczyt z pliku save.ntwk : l', 10, 150
+    text 'Eksport do pliku output.pl : e', 10, 165
+    text 'Import z pliku input.txt : i', 10, 180
   end
 
   def mouse_released
@@ -92,9 +95,13 @@ class Jtmseditor < Processing::App
     when 81
       @select.switch if @select.class == Assertion
     when 83
-      save
+      save_file
     when 76
-      load
+      load_file
+    when 69
+      export_file
+    when 73
+      import_file
     end
   end
 
@@ -110,7 +117,7 @@ class Jtmseditor < Processing::App
     found.negate
   end
 
-  def save
+  def export_file
     output = ''
     nodes = @objects.select { |x| x.class == Assertion }
     nodes_attr = nodes.map { |x| x.in? ? 1 : 0 }
@@ -128,7 +135,7 @@ class Jtmseditor < Processing::App
     puts 'not saved'
   end
 
-  def load
+  def import_file
     input = File.read 'input.txt'
     input.split("\n").map { |x| x.split(' ') }.each do |id, state|
       node = @objects.find { |x| x.id == id.to_i }
@@ -138,6 +145,16 @@ class Jtmseditor < Processing::App
     puts 'not loaded'
   end
 
-end
+  def save_file
+    File.open('save1.ntwk', 'w') do |f|
+      f << Marshal.dump([@objects, @edges, @counter])
+    end
+  rescue
+  end
 
-Jtmseditor.new :title => "Jtmseditor", :width => 800, :height => 600
+  def load_file
+    @objects, @edges, @counter = Marshal.load File.read 'save1.ntwk'
+  rescue
+  end
+
+end
